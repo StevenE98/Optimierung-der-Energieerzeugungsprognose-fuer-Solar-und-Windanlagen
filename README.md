@@ -19,4 +19,4 @@ Sklearn
 
 * **Nikita Masch**
 * **Steven Edy**
-* **Julian Walter
+* **Julian Walter**
