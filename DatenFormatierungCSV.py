@@ -21,8 +21,45 @@ def csvChange(csv, name):
     for index, row in df.iterrows():
         month = row['Date']
         # Konvertiere Monatsnamen in Zahlen (01 für Januar, 02 für Februar, usw.)
+        month= row['Date']
+
         if month == "January":
             df.at[index,'Date'] = '01'
+        elif month == "February":
+            df.at[index, 'Date'] = '02'
+
+        elif month == "March":
+            df.at[index, 'Date'] = '03'
+
+        elif month == "April":
+            df.at[index, 'Date'] = '04'
+
+        elif month == "May":
+            df.at[index, 'Date'] = '05'
+
+        elif month == "June":
+            df.at[index, 'Date'] = '06'
+
+        elif month == "July":
+            df.at[index, 'Date'] = '07'
+
+        elif month == "August":
+            df.at[index, 'Date'] = '08'
+
+        elif month == "September":
+            df.at[index, 'Date'] = '09'
+
+        elif month == "October":
+            df.at[index, 'Date'] = '10'
+
+        elif month == "November":
+            df.at[index, 'Date'] = '11'
+
+        elif month == "December":
+            df.at[index, 'Date'] = '12'
+
+        else:
+            df.at[index, 'Date'] = None
         # ... (gleiches für andere Monate)
 
     # Bereinige und konvertiere die 'y'-Spalte in numerische Werte, entferne nicht-numerische Zeilen
@@ -69,16 +106,25 @@ def data_n(df):
     df['y'] = pd.to_numeric(df['y'], errors='coerce').astype(int)
     df['value'] = pd.to_numeric(df['value'], errors='coerce')
     df = df.dropna(subset=['y', 'value'])
-
+  
     # Konvertiere Monatsnamen in Zahlen und erstelle das Datumsformat
-    # ... (ähnlich wie oben beschrieben)
+    months = {
+        "January": "01", "February": "02", "March": "03", "April": "04",
+        "May": "05", "June": "06", "July": "07", "August": "08",
+        "September": "09", "October": "10", "November": "11", "December": "12"
+    }
+
+    df['Date'] = df['Date'].map(months)
+
+    df['Date (GMT+1)'] = pd.to_datetime('2016-' + df['Date'].astype(str) + '-' + df['y'].astype(str).str.zfill(2) + 'T00:00:00') + pd.to_timedelta(df['y'], unit='h')
+    df['Date (GMT+1)'] = df['Date (GMT+1)'].dt.strftime('%Y-%m-%dT%H:%M:%S')
 
     # Entferne unnötige Spalten
     df = df.drop(['Date', 'y'], axis=1)
 
     return df
 
-# Die Funktion 'save_data' speichert die bearbeiteten DataFrames in CSV-Dateien
+# Die Funktion 'save_data' speichert die bearbeiteten DataFrames in CSV-Dateien hat einen Counter für das Jahresdatum
 def save_data(dataframes, base_path):
     count = 2015
     for df in dataframes:
