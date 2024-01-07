@@ -127,10 +127,10 @@ def data_n(df):
 
 
 # Die Funktion 'save_data' speichert die bearbeiteten DataFrames in CSV-Dateien
-def save_data(dataframes, base_path):
-    count = 2023
+def save_data(dataframes, base_path,name,minJahr):
+    count = minJahr
     for df in dataframes:
-        df.to_csv(f"{base_path}/Diffuse_solar_radiation{count}.csv", index=False)
+        df.to_csv(f"{base_path}/{name}{count}.csv", index=False)
         count += 1
 
 
@@ -140,6 +140,7 @@ if __name__ == '__main__':
         "C:\\Users\\Nikita\\Downloads\\energy-charts_Diffuse_solar_radiation_in_Germany_in_2023.csv",
         "C:\\Users\\Nikita\\Downloads\\energy-charts_Diffuse_solar_radiation_in_Germany_in_2024.csv"
         ]
-    name = "Diffuse_solar_radiation"
+    minJahr = 2023 #Mindest Jahr angeben von den files
+    name = "Diffuse_solar_radiation"  # Value zuweisung und bennenung der neuen Datei
     newDF = csvChange(csv, name)
-    save_data(newDF, "C:\\Users\\Nikita\\Desktop\\Projekt")
+    save_data(newDF, "C:\\Users\\Nikita\\Desktop\\Projekt", name,minJahr)
