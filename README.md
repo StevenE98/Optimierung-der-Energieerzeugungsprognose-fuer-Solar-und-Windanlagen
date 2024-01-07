@@ -159,15 +159,13 @@ if __name__ == '__main__':
 ```
 <img width="423" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/16e71b1a-16d1-4394-a26a-acd5b880a565">
 
-4 **LSTM Modell**
-> Bei der Anwendung eines LSTM-Modells für Zeitreihendaten werden die Daten zunächst in Trainings-, Validierungs- und Testsets aufgeteilt und normalisiert. Nach der Definition von Zeitfenstern wird das LSTM-Modell mit geeigneten Funktionen für Optimierung, Verlust und Leistungsmetriken kompiliert. Das Training erfolgt über model.fit() unter Einsatz der Trainings- und Validierungsdaten. Abschließend wird das Modell mit dem Testdatensatz evaluiert und die Ergebnisse werden denormalisiert, um die Leistung des Modells zu beurteilen.
-
-
-
 >[!NOTE]
 > Der letzte Schritt besteht darin die Daten hochzuladen im Jupyter
 > Lab und  sie einzulesen im Dataframe unter files .Dannach kann man
 > die Prognosen inerhalb des JupyterLabs machen(Kommentare sind vorhanden).
+
+4 **LSTM Modell**
+> Bei der Anwendung eines LSTM-Modells für Zeitreihendaten werden die Daten zunächst in Trainings-, Validierungs- und Testsets aufgeteilt und normalisiert. Nach der Definition von Zeitfenstern wird das LSTM-Modell mit geeigneten Funktionen für Optimierung, Verlust und Leistungsmetriken kompiliert. Das Training erfolgt über model.fit() unter Einsatz der Trainings- und Validierungsdaten. Abschließend wird das Modell mit dem Testdatensatz evaluiert und die Ergebnisse werden denormalisiert, um die Leistung des Modells zu beurteilen.
 
 
 
