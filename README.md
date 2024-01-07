@@ -1,4 +1,4 @@
-<img width="423" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/10470ecf-c39a-401b-8a2f-840bdc991740"># Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen
+# Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen
 
 Das Solarprognose Programm nutzt Wetterdaten des ERA5 Modells und Energieerzeugungsdaten des Frauenhofer-Institut für Solare Energiesysteme, um dann mit Hilfe von KI eine möglichst genaue Energieerzeugungsprognose für sowohl Solar- als auch Windenergie zu erzeugen.
 
@@ -162,7 +162,8 @@ if __name__ == '__main__':
 
 >[!NOTE]
 > Der letzte Schritt besteht darin die Daten hochzuladen im Jupyter
-> Lab und  sie einzulesen im Dataframe unter dem Stichwort files .
+> Lab und  sie einzulesen im Dataframe unter files .Dannach kann man
+> die Prognosen inerhalb des JupyterLabs machen(Kommentare sind vorhanden).
 
 
 
