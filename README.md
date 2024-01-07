@@ -143,18 +143,19 @@ Sklearn
 >damit die Daten in einem Dataframe mit den Klimadaten vereinheitlicht werden können.
 
 >[!Important]
-> a
->
+> Veränderung müssen nur in der main vorgenommen werden , die Kommentare erklären die Schritte.
+
 
 ```
 if __name__ == '__main__':
-    file_electricity = 'C:\\Users\\Nikita\\Downloads\\energy-charts_Public_net_electricity_generation_in_Germany_in_2024 (1).csv'  #Eigenen Pfad angeben von nur einem File
+    file_electricity = 'C:\\Users\\Nikita\\Downloads\\energy-charts_Public_net_electricity_generation_in_Germany_in_2024 
+    (1).csv'  #Eigenen Pfad angeben von nur einem File
     Electrictyname = 'Solar' # Namen zuweisen in abhängikeit ob es Solar oder Windkraftanlagen sind
     AngabeMW = 'Average_Solar_Power(MW)' # Namen zuweisen in abhängikeit ob es Solar oder Windkraftanlagen sind
-    df_electricity_hourly = process_electricity_data(file_electricity,    Electrictyname, AngabeMW)
-    df_electricity_hourly.to_csv("path_to_save_processed_data.csv", index=False)
-    df_electricity_hourly.to_csv(f"C:\\Users\\Nikita\\Desktop\\Projekt\\wind_electricity_generation_in_Germany_in_2024.csv", index=False)
-    #  Eigenen Pfad angeben zum speichern der Datei
+    df_electricity_stunde = process_electricity_data(file_electricity,    Electrictyname, AngabeMW)
+    df_electricity_stunde.to_csv(f"C:\\Users\\Nikita\\Desktop\\Projekt\\wind_electricity_generation
+    _in_Germany_in_2024.csv", index=False)   #  Eigenen Pfad angeben zum speichern der Datei
+  
 ```
 
 
