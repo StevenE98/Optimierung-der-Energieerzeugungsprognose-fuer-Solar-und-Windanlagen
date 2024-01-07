@@ -168,12 +168,10 @@ if __name__ == '__main__':
 > [!note]
 > Bei der Anwendung eines LSTM-Modells für Zeitreihendaten werden die Daten zunächst in Trainings-, Validierungs- und Testsets aufgeteilt und normalisiert. Nach der Definition von Zeitfenstern wird das LSTM-Modell mit geeigneten Funktionen für Optimierung, Verlust und Leistungsmetriken kompiliert. Das Training erfolgt über model.fit() unter Einsatz der Trainings- und Validierungsdaten. Abschließend wird das Modell mit dem Testdatensatz evaluiert und die Ergebnisse werden denormalisiert, um die Leistung des Modells zu beurteilen.
 
-
-...
+```
 MAX_EPOCHS = 3
-
 multi_lstm_model = tf.keras.Sequential([
-    # Eine LSTM-Schicht mit 32 Einheiten. 'return_sequences=False' bedeutet, dass nur der letzte Output der Sequenz zurückgegeben wird.
+   # Eine LSTM-Schicht mit 32 Einheiten. 'return_sequences=False' bedeutet, dass nur der letzte Output der Sequenz zurückgegeben wird.
     tf.keras.layers.LSTM(32, return_sequences=False),
     
     # Eine Dense-Schicht, die die Ausgabe des LSTM auf die gewünschte Größe bringt. 
@@ -192,7 +190,7 @@ validierungsDatensätze['LSTM'] = multi_lstm_model.evaluate(multi_window.val)
 multiLeistung['LSTM'] = multi_lstm_model.evaluate(multi_window.test, verbose=0)
 
 multi_window.plot(multi_lstm_model)
-...
+```
 
 5 **Conclusion.**
 >[!IMPORTANT]
