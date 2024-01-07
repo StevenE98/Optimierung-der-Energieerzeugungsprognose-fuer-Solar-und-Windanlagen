@@ -117,8 +117,7 @@ Sklearn
 > Identifizierbaren Namen zu geben der sich von den anderen CSV Dateien unterscheidet die andere Klima Daten reprsäsentieren.
 
 > [!IMPORTANT]
-> In der main Funktion sollen alle Daten eingetragen werden die ,die gleichen Klima Daten räpresentieren aber von
-> unterschiedlichen Jahren sind.
+> Veränderung werden nur in der Main vorgenommen , die Kommentare erklären den Vorgang.
 ```
  if __name__ == '__main__':
     csv = [  # Eigenen Pfad angeben zu den Klima Daten nach Zeit ordnen
@@ -138,7 +137,8 @@ Sklearn
 
 >[!IMPORTANT]
 > Der Code zur Formatierung von Energierzeugungsdaten ist unter dem [Link verfügbar](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/blob/main/Datenformatierung_Energieerzeugungsdaten.py)
->[!NOTE]
+
+> [!NOTE]
 >Der Code dient dem Zweck die Daten nach Stunden zu gruppieren und den Durchschnitt zu berechnen,
 >damit die Daten in einem Dataframe mit den Klimadaten vereinheitlicht werden können.
 
