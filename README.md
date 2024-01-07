@@ -19,9 +19,10 @@ Sklearn
    <img width="928" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/776442f6-f87e-4ca7-86cf-504d3f944a61">
    
    
-   > Auf dieser Website befinden sich Klima Daten die eine wichtige Rolle spielen für die prognostizierung der Solar- und Windanlagen.
-   > Unter folgendem Link [Klima Daten](https://www.energy-charts.info/charts/climate_hours/chart.htm?l=en&c=DE&source=solar_globe&year=2022&interval=year) 
-   > kann man auf die Website zugreifen.
+> [!NOTE]
+> Auf dieser Website befinden sich Klima Daten die eine wichtige Rolle spielen für die prognostizierung der Solar- und Windanlagen.
+> Unter folgendem **Link** [Klima Daten](https://www.energy-charts.info/charts/climate_hours/chart.htm?l=en&c=DE&source=solar_globe&year=2022&interval=year) 
+> kann man auf die Website zugreifen.
 
 <img width="184" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/df3f1868-caf1-4d6b-ba38-05685e39b09c">
 
