@@ -164,12 +164,12 @@ if __name__ == '__main__':
 > Lab und  sie einzulesen im Dataframe unter files .Dannach kann man
 > die Prognosen inerhalb des JupyterLabs machen(Kommentare sind vorhanden).
 
-4 **LSTM Modell (long short-term memory)**
+4 **LSTM Modell (long short-term memory).**
 > [!note]
 > Bei der Anwendung eines LSTM-Modells für Zeitreihendaten werden die Daten zunächst in Trainings-, Validierungs- und Testsets aufgeteilt und normalisiert. Nach der Definition von Zeitfenstern wird das LSTM-Modell mit geeigneten Funktionen für Optimierung, Verlust und Leistungsmetriken kompiliert. Das Training erfolgt über model.fit() unter Einsatz der Trainings- und Validierungsdaten. Abschließend wird das Modell mit dem Testdatensatz evaluiert und die Ergebnisse werden denormalisiert, um die Leistung des Modells zu beurteilen.
 
 
-5 **Conclusion**
+5 **Conclusion.**
 >[!IMPORTANT]
 > Solarprognosen können erflogreich durchgeführt werden. 
 > Die prozentuale Abweichung unter Verwendung des LSTM-Modells liegt bei etwa 18%.
