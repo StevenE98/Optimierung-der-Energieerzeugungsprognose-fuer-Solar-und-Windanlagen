@@ -173,19 +173,18 @@ if __name__ == '__main__':
 >[!IMPORTANT]
 > Solarprognosen können erflogreich durchgeführt werden. 
 > Die prozentuale Abweichung unter Verwendung des LSTM-Modells für Solaranlagen liegt bei etwa 11,52%.
-> Diese schwankt jedoch stark wenn sich der Zeitraum der Prognose verändert. 
+> Die Prognose schwankt jedoch stark wenn der Zeitraum weiter in der Zukunft liegt. 
 
 >[!NOTE]
 > Für ein genaueres Ergebnis der Prognose kann noch ein Autoencoder hinzugefügt werden.
 > Mit diesem können dann noch beispielsweise Vorhersagen von Wetterdiensten verwendet werden, 
 > wodurch die entstehende Prognose weiter angepasst werden kann.
->
-> Zum jetzigen Zeitpunkt kann der Autoencoder jedoch nicht im Modell integriert werden.
+> Die Implimentation des Autoencoderes kann wegen des jetztigen Zeitrahmens zur Zeit nicht realisiert werden.
+
 
 
 >[!IMPORTANT]
-> Die Vorhersage von Windkraft ist im Gegensatz zur Solar-Prognose weitaus komplexer und auch ungenauer, 
-> weshalb die Integration dieser erstmal nicht fortgesetzt wurde.
+> Die Vorhersage von Windkraftanlagen-Prognose ist im Gegensatz zur Solar-Prognosen schwieriger zu bestimmen
 
 
 
