@@ -564,7 +564,7 @@ def ki(offset):
 
     # Now apply the corrected denormalization formula
     denormalized_predictions = (electricity_generation_predictions * train_std_selected['Electricity_generation'])  + train_mean_selected['Electricity_generation']
-                                                            
+    
     print("Denormalized predictions for Electricity Generation:")
 
 
@@ -581,7 +581,6 @@ def ki(offset):
     hours = new_Data.index.hour
     with plt.style.context('dark_background'):
         plt.plot(denormalized_predictions.flatten(), marker='o', color = 'c')
-    plt.title('Prognose ab dem  ' + str(dates.max()) , color = 'c' )
     plt.xlabel('Stunden', color = 'r')
     plt.ylabel('Stromerzeugung  in MW' , color = 'r')
     plt.savefig('rnn.png')
@@ -590,11 +589,12 @@ def ki(offset):
 
 def button_click(): #das macht der Knopf
     print('scale value:', round(scale.get()))
-    offset = 24
-    if (scale.get != 0):
-        offset = round(scale.get())
     
-    ki(round(offset))
+    wert = 24
+    if round(scale.get()) != 0:
+        wert = round(scale.get())
+    
+    ki(wert)
     display_image = PhotoImage(file='rnn.png').zoom(x=2,y=2)
     
     # Bild im Label-Widget anzeigen
