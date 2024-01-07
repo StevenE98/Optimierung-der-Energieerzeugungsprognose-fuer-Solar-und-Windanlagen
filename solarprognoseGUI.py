@@ -590,7 +590,11 @@ def ki(offset):
 
 def button_click(): #das macht der Knopf
     print('scale value:', round(scale.get()))
-    ki(round(scale.get()))
+    offset = 24
+    if (scale.get != 0):
+        offset = round(scale.get())
+    
+    ki(round(offset))
     display_image = PhotoImage(file='rnn.png').zoom(x=2,y=2)
     
     # Bild im Label-Widget anzeigen
@@ -614,9 +618,3 @@ buttonL.place(width=200, height= 50)
 buttonL.pack(side= "left", padx= 10)
 
 root.mainloop()
-
-"""
-buttonbw = tk.Button(root, text="Baden-Württemberg", command=button_click) # die ganze Knöpfe
-buttonbw.pack()
-buttonbw.place(x= 250, y= 700, width=130, height= 20)
-"""
