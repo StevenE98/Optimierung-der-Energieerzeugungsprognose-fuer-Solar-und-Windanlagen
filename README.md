@@ -137,7 +137,7 @@ Sklearn
 > Die Daten aus Abschnitt 2 sollten exportiert sein damit sie in das folgende Programm eingelesen werden können.
 
 >[!IMPORTANT]
-> Der Code zur Formatierung von Energierzeugungsdaten ist unter dem [Link verfügbar]https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/blob/main/Datenformatierung_Energieerzeugungsdaten.py
+> Der Code zur Formatierung von Energierzeugungsdaten ist unter dem [Link verfügbar](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/blob/main/Datenformatierung_Energieerzeugungsdaten.py)
 >[!NOTE]
 >Der Code dient dem Zweck die Daten nach Stunden zu gruppieren und den Durchschnitt zu berechnen,
 >damit die Daten in einem Dataframe mit den Klimadaten vereinheitlicht werden können.
