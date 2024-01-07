@@ -112,7 +112,32 @@ Sklearn
 > Die Daten aus Abschnitt 1 sollten exportiert sein damit sie in das folgende Programm eingelesen werden können.
 
 > [!IMPORTANT]
-> Was nun zu beachten ist das
+> Der Code unter dem [Link](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/blob/main/DatenFormatierungCSV.py)
+> dient dem Zweck die exportierten CSV Daten zu überschreiben mit korrekten Datumsformat und der Spalte Value eine Identifizierbaren Namen zu geben der sich
+> von den anderen CSV Dateien unterscheidet die andere Klima Daten reprsäsentieren.
+>
+> In der main Funktion sollen alle Daten eingetragen werden die ,die gleichen Klima Daten räpresentieren aber von unterschiedlichen Jahren sind.
+> if __name__ == '__main__':
+>    csv = [
+>       "C:\\Users\\Nikita\\Downloads\\energy-charts_Diffuse_solar_radiation_in_Germany_in_2023.csv",  # Eigenen Pfad angeben zu den Klima Daten nach Zeit ordnen
+>        "C:\\Users\\Nikita\\Downloads\\energy-charts_Diffuse_solar_radiation_in_Germany_in_2024.csv"]   # Eigenen Pfad angeben zu den Klima Daten nach Zeit ordnen
+>
+>    name = "Diffuse_solar_radiation" # Namen zuweisen für value
+>    newDF = csvChange(csv, name)
+>    save_data(newDF, "C:\\Users\\Nikita\\Desktop\\Projekt") #Eigenen Pfad angeben wo die Daten abgespeichert werden sollen
+>
+> # Die Funktion 'save_data' speichert die bearbeiteten DataFrames in CSV-Dateien
+>def save_data(dataframes, base_path):
+>    count = 2023                     # count auf das niedrigste Jahr setzten , wird verwendet um den Dateinamen zu bestimmen
+>    for df in dataframes:
+>        df.to_csv(f"{base_path}/Diffuse_solar_radiation{count}.csv", index=False)   #
+>       count += 1
+
+
+
+
+
+
 
 ```
    import pandas as pd
