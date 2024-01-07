@@ -179,7 +179,8 @@ if __name__ == '__main__':
 > Für ein genaueres Ergebnis der Prognose kann noch ein Autoencoder hinzugefügt werden.
 > Mit diesem können dann noch beispielsweise Vorhersagen von Wetterdiensten verwendet werden, 
 > wodurch die entstehende Prognose weiter angepasst werden kann.
-> Zum jetzigen Zeitpunkt kann der Autoencoder nicht im Modell integriert werden.
+>
+> Zum jetzigen Zeitpunkt kann der Autoencoder jedoch nicht im Modell integriert werden.
 
 
 >[!IMPORTANT]
