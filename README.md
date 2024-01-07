@@ -172,7 +172,7 @@ if __name__ == '__main__':
 5 **Conclusion.**
 >[!IMPORTANT]
 > Solarprognosen können erflogreich durchgeführt werden. 
-> Die prozentuale Abweichung unter Verwendung des LSTM-Modells liegt bei etwa 18%.
+> Die prozentuale Abweichung unter Verwendung des LSTM-Modells für Solaranlagen liegt bei etwa 11,52%.
 > Diese schwankt jedoch stark wenn sich der Zeitraum der Prognose verändert. 
 
 >[!NOTE]
