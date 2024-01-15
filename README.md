@@ -194,7 +194,7 @@ multi_window.plot(multi_lstm_model)
 
 ```
 
-<img ![Screenshot 2024-01-15 141017](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/6c7c3e38-e899-4cc3-814d-1220c3e6399e)>
+![Screenshot 2024-01-15 141017](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/6c7c3e38-e899-4cc3-814d-1220c3e6399e)
 
 
 5 **Conclusion.**
