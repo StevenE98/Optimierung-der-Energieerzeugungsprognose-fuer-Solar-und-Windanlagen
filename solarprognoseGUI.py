@@ -8,7 +8,11 @@ from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from tensorflow import keras
 from IPython import display
-from sklearn.linear_model import LinearRegression
+import calendar
+from datetime import datetime
+from tkcalendar import Calendar
+import threading    
+
 
 root = tk.Tk()
 root.title("Solarenergie Prognose")
@@ -37,7 +41,7 @@ labeloutP.pack (side="left",padx=20, pady= 20)
 text1 = tk.Text(root, height= 1 , width= 10)
 text1.pack(side="left", padx=20, pady=20)
 """
-def ki(offset):
+def ki(offset, date):
     files = [ 
         "Air_temperature2015.csv",
         "Air_temperature2016.csv",
@@ -70,13 +74,11 @@ def ki(offset):
         "global_solar_radiation2019.csv",
         "global_solar_radiation2020.csv",
         "global_solar_radiation2021.csv",
-        "global_solar_radiation2022.csv",
-
-        ]
+        "global_solar_radiation2022.csv",]
 
     #files elect hingegen hat Minuten angaben was dazu führt das leere rows entsthen, mit NaN values , um dagegen zu wirken habe ich die Zeit auf Stunden gerundet
     #und die einzelnen values wie humidity , solar_radiation nach dem Datum sortiert
-    files_elect = [     "electricity_generation_in_Germany_in_2015.csv",
+    files_elect = [ "electricity_generation_in_Germany_in_2015.csv",
         "electricity_generation_in_Germany_in_2016.csv",
         "electricity_generation_in_Germany_in_2017.csv",
         "electricity_generation_in_Germany_in_2018.csv",
@@ -87,7 +89,7 @@ def ki(offset):
 
 
     # Definiert eine Funktion, um eine Liste von csv Dateien für eine einzelne Variable zu verarbeiten
-    def process_df(files, variable_name):
+    def process_df(files, variable_name,date):
 
         variable_df = pd.DataFrame()
 
@@ -107,32 +109,34 @@ def ki(offset):
             df.columns = [variable_name]
             # Verkettet den aktuellen DataFrame mit dem Variable DataFrame am Index.
             variable_df = pd.concat([variable_df, df], axis=1)
+            #variable_df = variable_df[(variable_df.index.month == date.month) & (variable_df.index.day == date.day)]
+
         
         # Nach dem Zusammenführen aller Dateien berechnet den Mittelwert über die Spalten, um sie zu konkatenieren.
         variable_df = variable_df.mean(axis=1)
         # Gibt die zusammengefassten Daten für die Variable als DataFrame zurück.
         return variable_df.to_frame(name=variable_name)
-
+    
+    
     # Verarbeitet die Daten jeder Variablen, indem die Dateinamen gefiltert und die Funktion aufgerufen wird.
-    temperature_df = process_df([f for f in files if "Air_temperature" in f], "Air_temperature")
-    diffuse_solar_radiation_df = process_df([f for f in files if "Diffuse_solar_radiation" in f], "Diffuse_solar_radiation")
-    global_solar_radiation_df = process_df([f for f in files if "global_solar_radiation" in f], "Global_solar_radiation")
-    humidity_df = process_df([f for f in files if "Relative_humidity" in f], "Relative_humidity")
-    electricity_df = process_df(files_elect, "Electricity_generation")
-
+    temperature_df = process_df([f for f in files if "Air_temperature" in f], "Air_temperature",date)
+    diffuse_solar_radiation_df = process_df([f for f in files if "Diffuse_solar_radiation" in f], "Diffuse_solar_radiation",date)
+    global_solar_radiation_df = process_df([f for f in files if "global_solar_radiation" in f], "Global_solar_radiation",date)
+    humidity_df = process_df([f for f in files if "Relative_humidity" in f], "Relative_humidity",date)
+    electricity_df = process_df(files_elect, "Electricity_generation",date)
+    
+    
     # Kombiniert die verarbeiteten DataFrames für jede Variable zu einem einzigen vollständigen DataFrame.
     complete_data = pd.concat([temperature_df, diffuse_solar_radiation_df, global_solar_radiation_df, humidity_df, electricity_df], axis=1)
 
     complete_data['Hour'] = complete_data.index.hour
     complete_data['Month'] = complete_data.index.month
-
-
-
+    
     def add_season_column(df):
         # Create a new column 'Season' and initialize it with 'Winter'
         # This also handles December from the previous year
         df['Jahreszeit'] = 'Winter'
-        
+    
         # Define the seasons based on the month
         df.loc[df.index.month.isin([3, 4, 5]), 'Jahreszeit'] = 'Frühling'
         df.loc[df.index.month.isin([6, 7, 8]), 'Jahreszeit'] = 'Sommer'
@@ -153,17 +157,28 @@ def ki(offset):
         'Sommer': 2,
         'Herbst': 3
     }
-
-    # Replace the 'Jahreszeit' column with numeric values
+    
+    def get_jahreszeit(date):
+        month = date.month
+        if 1 <= month <= 2 or month == 12:
+            return 0
+        elif 3 <= month <= 5:
+            return 1
+        elif 6 <= month <= 8:
+            return 2
+        elif 9 <= month <= 11:
+            return 3
+    # Replace the 'Jahreszeit' column with numeric values4
+    
     complete_data['Jahreszeit'] = complete_data['Jahreszeit'].replace(season_to_numeric)
-
+    
     # Now the 'Jahreszeit' column has numeric values that represent seasons
     # Show the DataFrame to confirm the changes
 
 
     complete_data
 
-    new_Data = complete_data.head(24)
+    new_Data = complete_data.head(48)
 
     new_Data
     # Berechnung der Korrelationsmatrix
@@ -252,7 +267,7 @@ def ki(offset):
             self.input_width = input_width
             self.label_width = label_width
             self.shift = shift
-
+            
             self.total_window_size = input_width + shift
 
             self.input_slice = slice(0, input_width)
@@ -295,8 +310,8 @@ def ki(offset):
         return inputs, labels
 
     WindowGenerator.split_window = split_window
-    import tensorflow as tf
-
+    
+    
     example_window = tf.stack([np.array(train_df[:w1.total_window_size]),
                             np.array(train_df[100:100+w1.total_window_size]),
                             np.array(train_df[200:200+w1.total_window_size])])
@@ -509,7 +524,7 @@ def ki(offset):
     axis.set_xticks(range(len(train_df.columns)))
     _ = axis.set_xticklabels(train_df.columns, rotation=90)
 
-    MAX_EPOCHS =  3
+    MAX_EPOCHS =  2
     multi_lstm_model = tf.keras.Sequential([
         # Shape [batch, time, features] => [batch, lstm_units].
         # Adding more `lstm_units` just overfits more quickly.
@@ -527,6 +542,9 @@ def ki(offset):
     multi_val_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.val)
     multi_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.test, verbose=0)
     multi_window.plot(multi_lstm_model)
+    
+    #complete_data = pd.DataFrame(index=3, columns=['Month'])
+    
         
     new_Data = complete_data.head(24).copy()
     new_Data.ffill(inplace=True)
@@ -569,11 +587,15 @@ def ki(offset):
 
 
     for i in range(len(denormalized_predictions)):
-        for j in range(len(denormalized_predictions[i])):
+        for j in range(len(denormalized_predictions[i])):           
             if denormalized_predictions[i][j] < 0:
                 denormalized_predictions[i][j] = 0
-
-                
+    
+    
+    valDate = new_Data.index[-1].date()
+    valHour = new_Data.index[-1].hour
+    
+    
     print(denormalized_predictions)
     plt.close('all')
     dates_times = new_Data.index
@@ -582,39 +604,74 @@ def ki(offset):
     with plt.style.context('dark_background'):
         plt.plot(denormalized_predictions.flatten(), marker='o', color = 'c')
     plt.xlabel('Stunden', color = 'r')
+    plt.title('Prognose ab dem  ' + str (valDate ) + '-' + str(valHour) + ':00  '  , color = 'c' )
     plt.ylabel('Stromerzeugung  in MW' , color = 'r')
     plt.savefig('rnn.png')
     multi_lstm_model.save('lstm')
 
-
 def button_click(): #das macht der Knopf
+    """
     print('scale value:', round(scale.get()))
     
-    wert = 24
+    wert = 1
     if round(scale.get()) != 0:
         wert = round(scale.get())
-    
-    ki(wert)
+    """
+    cal_date = cal.get_date()
+    cal_date = datetime.strptime(cal_date, "%m/%d/%y")
+    ki(24, cal_date)
     display_image = PhotoImage(file='rnn.png').zoom(x=2,y=2)
     
     # Bild im Label-Widget anzeigen
     image_label.config(image=display_image)
     image_label.image = display_image  # Referenz behalten, um Garbage Collection zu vermeiden
 
+"""
 def on_scale_change(event):
-    scale_value_label.config(text=f'Interval: {round(scale.get())}')
+    scale_value_label.config(text=f'Interval: {round(scale.get())} std')
+"""
+style = ttk.Style()
+style.configure('SunAndSky.TButton', 
+                font=('Helvetica', 17),
+                foreground='dark blue',
+                background='turquoise',
+                borderwidth=2,
+                focusthickness=3,
+                focuscolor='none'
+                )
+style.map('SunAndSky.TButton',
+        background=[('active', 'sky blue')],
+        foreground=[('active', 'blue')])
 
-scale = ttk.Scale(root, from_=24, to=720, orient='horizontal', command=on_scale_change)
-scale.pack(side = "left", padx=20)
-scale_value_label = ttk.Label(root, text='Interval: 24')
+style2 = ttk.Style()
+style2.configure('custom.TButton', 
+                font=('Helvetica', 17),
+                foreground='dark blue',  # Textfarbe
+                background='turquoise',  # Hintergrundfarbe
+                borderwidth=2,
+                relief='raised',
+                focusthickness=3) 
+
+"""
+scale = ttk.Scale(root, from_=1, to=720, orient='horizontal', command=on_scale_change, length= 250)
+scale.pack(side = "left", padx=20 )
+
+scale_value_label = ttk.Label(root, text='Interval: 1 std', style='custom.TButton')
 scale_value_label.pack(side= "left")
-
+"""
 
 image_label = Label(root)
 image_label.pack(side="right", padx=20, pady=20)
 
-buttonL = tk.Button(root, text="Los!", command=button_click) # die ganze Knöpfe
-buttonL.place(width=200, height= 50)
+buttonL = ttk.Button(root, text="Start", command=button_click, style='SunAndSky.TButton' ) # die ganze Knöpfe
+buttonL.place(width=400, height= 150)
 buttonL.pack(side= "left", padx= 10)
+
+
+cal = Calendar(root, selectmode='day')
+cal.pack(side= "left")
+
+
+
 
 root.mainloop()
