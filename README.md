@@ -171,7 +171,7 @@ if __name__ == '__main__':
 
 ```
 
-MAX_EPOCHS = 3
+MAX_EPOCHS = 8
 #gibt an wie viel Batches die Modell durchlaufen soll
 multi_lstm_model = tf.keras.Sequential([
    # Eine LSTM-Schicht mit 32 Einheiten. 'return_sequences=False' bedeutet, dass nur der letzte Output der Sequenz zurückgegeben wird.
