@@ -170,6 +170,8 @@ if __name__ == '__main__':
 
 
 ```
+<img ![Screenshot 2024-01-15 141017](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/6c7c3e38-e899-4cc3-814d-1220c3e6399e)>
+
 MAX_EPOCHS = 3
 #gibt an wie viel Batches die Modell durchlaufen soll
 multi_lstm_model = tf.keras.Sequential([
@@ -192,6 +194,8 @@ multiLeistung['LSTM'] = multi_lstm_model.evaluate(multi_window.test, verbose=0)
 multi_window.plot(multi_lstm_model)
 
 ```
+
+
 
 5 **Conclusion.**
 >[!IMPORTANT]
