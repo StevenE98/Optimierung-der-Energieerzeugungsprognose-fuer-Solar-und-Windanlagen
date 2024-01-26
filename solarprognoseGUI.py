@@ -1,677 +1,668 @@
 import tkinter as tk
-from tkinter import PhotoImage, Entry, Button, Label, ttk   
+import ttkbootstrap as ttk
+from ttkbootstrap import Style
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
-import tensorflow as tf
-from tensorflow import keras
-from IPython import display
-import calendar
-from datetime import datetime
-from tkcalendar import Calendar
-import threading    
+from sklearn.linear_model import LinearRegression
+from tkinter import Canvas, PhotoImage, Toplevel
+from PIL import Image, ImageTk
 
 
-root = tk.Tk()
+root = ttk.Window(themename="cyborg")
 root.title("Solarenergie Prognose")
+root.geometry("1920x1080")
+root.position_center()
+dateVal = None
+def open(str):
+ pil_image = Image.open('rnn.png')
 
-root.geometry("1920x1080") #Standard-Größe
-root.minsize(width=400, height=400) #kleinste Fenster
-root.maxsize(width=1920, height=1080) #größte Fenster
-root.resizable(width= False, height= False)
-
-"""
-label1 = tk.Label(root, text="Solarenergie Prognose", bg="green")
-label1.pack(side="top", expand= True  ,fill="x")
-"""
-
-background_image = PhotoImage(file= "brend.png").zoom(x=3,y=3)
-background_label = Label(root, image=background_image)
-background_label.place(relwidth=1, relheight=1)
-
+ tk_image = ImageTk.PhotoImage(pil_image)
+ label = tk.Label(root, image=tk_image)
+ label.pack()
+ root.bind("<Escape>", lambda event: root.attributes("-fullscreen", False))
+def close_event(event):
+    if event.key == 'escape':
+        plt.close(event.canvas.figure)
 
 
-"""
-labeloutP = tk.Label(root , text="Output Parameter in Stunden: ",width= 30)
-labeloutP.pack (side="left",padx=20, pady= 20)
 
 
-text1 = tk.Text(root, height= 1 , width= 10)
-text1.pack(side="left", padx=20, pady=20)
-"""
-def ki(offset, date):
-    files = [ 
-        "Air_temperature2015.csv",
-        "Air_temperature2016.csv",
-        "Air_temperature2017.csv",
-        "Air_temperature2018.csv",
-        "Air_temperature2019.csv",
-        "Air_temperature2020.csv",
-        "Air_temperature2021.csv",
-        "Air_temperature2022.csv",
-        "Diffuse_solar_radiation2015.csv",
-        "Diffuse_solar_radiation2016.csv",
-        "Diffuse_solar_radiation2017.csv",
-        "Diffuse_solar_radiation2018.csv",
-        "Diffuse_solar_radiation2019.csv",
-        "Diffuse_solar_radiation2020.csv",
-        "Diffuse_solar_radiation2021.csv",
-        "Diffuse_solar_radiation2022.csv",
-        "Relative_humidity2015.csv",
-        "Relative_humidity2016.csv",
-        "Relative_humidity2017.csv",
-        "Relative_humidity2018.csv",
-        "Relative_humidity2019.csv",
-        "Relative_humidity2020.csv",
-        "Relative_humidity2021.csv",
-        "Relative_humidity2022.csv",
-        "global_solar_radiation2015.csv",
-        "global_solar_radiation2016.csv",
-        "global_solar_radiation2017.csv",
-        "global_solar_radiation2018.csv",
-        "global_solar_radiation2019.csv",
-        "global_solar_radiation2020.csv",
-        "global_solar_radiation2021.csv",
-        "global_solar_radiation2022.csv",]
+def see_date():
+    global dateVal
+    dateVal = cal.entry.get()
+    #date_label.config(text=date)
+    return dateVal
 
-    #files elect hingegen hat Minuten angaben was dazu führt das leere rows entsthen, mit NaN values , um dagegen zu wirken habe ich die Zeit auf Stunden gerundet
-    #und die einzelnen values wie humidity , solar_radiation nach dem Datum sortiert
-    files_elect = [ "electricity_generation_in_Germany_in_2015.csv",
-        "electricity_generation_in_Germany_in_2016.csv",
-        "electricity_generation_in_Germany_in_2017.csv",
-        "electricity_generation_in_Germany_in_2018.csv",
-        "electricity_generation_in_Germany_in_2019.csv",
-        "electricity_generation_in_Germany_in_2020.csv",
-        "electricity_generation_in_Germany_in_2021.csv",
-        "electricity_generation_in_Germany_in_2022.csv"    ]
+image_path = 'path_to_your_image.png'  
 
 
-    # Definiert eine Funktion, um eine Liste von csv Dateien für eine einzelne Variable zu verarbeiten
-    def process_df(files, variable_name,date):
-
-        variable_df = pd.DataFrame()
 
 
-        for file in files:
-            # Liest die aktuelle CSV-Datei in einen DataFrame.
-            df = pd.read_csv(file)
-            # Konvertieren der Spalte 'Date (GMT+1)' in ein einheitliches Zeitformat ,rundung auf die nächste Stunde.
-            df['Date (GMT+1)'] = pd.to_datetime(df['Date (GMT+1)']).dt.round('H')
-            # Gruppiert nach 'Date (GMT+1)', um Duplikate zu entfernen und  den Mittelwert der Werte zu erechnen. 
-            # Der Durchschnitt dieser Messungen  wird mit mean() berechnet, um einen einzelnen Wert pro Stunde zu erhalten.
-            df = df.groupby('Date (GMT+1)').mean()
-            # Wenn mehrere Spalten vorhanden sind, wählt die zweite Spalte (angenommen, es ist die Datenspalte).
-            if len(df.columns) > 1:
-                df = df.iloc[:, [1]]
-            # Benennt die Spalte um in den gegebenen Variablennamen.
-            df.columns = [variable_name]
-            # Verkettet den aktuellen DataFrame mit dem Variable DataFrame am Index.
-            variable_df = pd.concat([variable_df, df], axis=1)
-            #variable_df = variable_df[(variable_df.index.month == date.month) & (variable_df.index.day == date.day)]
-
-        
-        # Nach dem Zusammenführen aller Dateien berechnet den Mittelwert über die Spalten, um sie zu konkatenieren.
-        variable_df = variable_df.mean(axis=1)
-        # Gibt die zusammengefassten Daten für die Variable als DataFrame zurück.
-        return variable_df.to_frame(name=variable_name)
     
+def startPredict():
+
+    train( dateVal = cal.entry.get())
+    display_image = PhotoImage(file='rnn.png').zoom(x=2,y=2)
     
-    # Verarbeitet die Daten jeder Variablen, indem die Dateinamen gefiltert und die Funktion aufgerufen wird.
-    temperature_df = process_df([f for f in files if "Air_temperature" in f], "Air_temperature",date)
-    diffuse_solar_radiation_df = process_df([f for f in files if "Diffuse_solar_radiation" in f], "Diffuse_solar_radiation",date)
-    global_solar_radiation_df = process_df([f for f in files if "global_solar_radiation" in f], "Global_solar_radiation",date)
-    humidity_df = process_df([f for f in files if "Relative_humidity" in f], "Relative_humidity",date)
-    electricity_df = process_df(files_elect, "Electricity_generation",date)
+
+label1 = tk.Label(root, text="Solarenergie Prognose", font=("Helvetica", 50), foreground='purple')
+label1.pack(padx= 100, pady=100)
+
+style = ttk.Style()
+style.configure('my.TButton', font=('Helvetica', 24), background='purple')
+
+cal = ttk.DateEntry(root, dateformat=('%Y-%m-%dT%H:%M:%S'), bootstyle="info")
+cal.pack(padx=100, pady=100)
+
+btn = ttk.Button(root, text="Datum festlegen", bootstyle="info", command=see_date, style='my.TButton')
+btn.pack(padx=100, pady=100)
+
+btn = ttk.Button(root, text="Start", bootstyle="info", command=startPredict,  style='my.TButton')
+btn.pack(padx=100, pady=100)
+
+
+root.state('zoomed')
+
+
+
+
+files_elect = [     "electricity_generation_in_Germany_in_2015.csv",
+    "electricity_generation_in_Germany_in_2016.csv",
+    "electricity_generation_in_Germany_in_2017.csv",
+    "electricity_generation_in_Germany_in_2018.csv",
+    "electricity_generation_in_Germany_in_2019.csv",
+    "electricity_generation_in_Germany_in_2020.csv",
+    "electricity_generation_in_Germany_in_2021.csv",
+    "electricity_generation_in_Germany_in_2022.csv"    ]
+files_elect2 = [     "electricity_generation_in_Germany_in_2015.csv",
+    "electricity_generation_in_Germany_in_2016.csv",
+    "electricity_generation_in_Germany_in_2017.csv",
+    "electricity_generation_in_Germany_in_2018.csv",
+    "electricity_generation_in_Germany_in_2019.csv",
+    "electricity_generation_in_Germany_in_2020.csv",
+    "electricity_generation_in_Germany_in_2021.csv",
+    "electricity_generation_in_Germany_in_2022.csv",
+    "energy-charts_Total_net_electricity_generation_in_Germany_in_2023.csv"
+               
+               ]
+
+import pandas as pd
+
+
+# Definiert eine Funktion, um eine Liste von csv Dateien für eine einzelne Variable zu verarbeiten
+def process_df(files, variable_name):
+  
+    variable_df = pd.DataFrame()
     
+   
+    for file in files:
+        # Liest die aktuelle CSV-Datei in einen DataFrame.
+        df = pd.read_csv(file)
+        # Konvertieren der Spalte 'Date (GMT+1)' in ein einheitliches Zeitformat ,rundung auf die nächste Stunde.
+        df['Date (GMT+1)'] = pd.to_datetime(df['Date (GMT+1)']).dt.round('H')
+        # Gruppiert nach 'Date (GMT+1)', um Duplikate zu entfernen und  den Mittelwert der Werte zu erechnen. 
+        # Der Durchschnitt dieser Messungen  wird mit mean() berechnet, um einen einzelnen Wert pro Stunde zu erhalten.
+        df = df.groupby('Date (GMT+1)').mean()
+        # Wenn mehrere Spalten vorhanden sind, wählt die zweite Spalte (angenommen, es ist die Datenspalte).
+        if len(df.columns) > 1:
+            df = df.iloc[:, [1]]
+        # Benennt die Spalte um in den gegebenen Variablennamen.
+        df.columns = [variable_name]
+        # Verkettet den aktuellen DataFrame mit dem Variable DataFrame am Index.
+        variable_df = pd.concat([variable_df, df], axis=1)
     
-    # Kombiniert die verarbeiteten DataFrames für jede Variable zu einem einzigen vollständigen DataFrame.
-    complete_data = pd.concat([temperature_df, diffuse_solar_radiation_df, global_solar_radiation_df, humidity_df, electricity_df], axis=1)
+    # Nach dem Zusammenführen aller Dateien berechnet den Mittelwert über die Spalten, um sie zu konkatenieren.
+    variable_df = variable_df.mean(axis=1)
+    # Gibt die zusammengefassten Daten für die Variable als DataFrame zurück.
+    return variable_df.to_frame(name=variable_name)
 
-    complete_data['Hour'] = complete_data.index.hour
-    complete_data['Month'] = complete_data.index.month
+
+electricity_df = process_df(files_elect, "Electricity_generation")
+
+
+electricity_df2 = process_df(files_elect2, "Electricity_generation")
+#wind_df = process_df([f for f in files if "Wind_Speed" in f], "Wind_Speed")
+
+# Kombiniert die verarbeiteten DataFrames für jede Variable zu einem einzigen vollständigen DataFrame.
+test_data = pd.concat([electricity_df2], axis=1)
+complete_data = pd.concat([electricity_df], axis=1)
+
+complete_data['Hour'] = complete_data.index.hour
+complete_data['Month'] = complete_data.index.month
+
+test_data['Hour'] = test_data.index.hour
+test_data['Month'] = test_data.index.month
+
+
+def add_season_column(df):
+    # Erstellt eine neue Spalte 'Season' und initialisiere es mit 'Winter'
+    # Es schließt den Monat Dezember des letzten Jahres mit ein.
+    df['Jahreszeit'] = 'Winter'
     
-    def add_season_column(df):
-        # Create a new column 'Season' and initialize it with 'Winter'
-        # This also handles December from the previous year
-        df['Jahreszeit'] = 'Winter'
+    # Hier Jahreszeiten definieren
+    df.loc[df.index.month.isin([3, 4, 5]), 'Jahreszeit'] = 'Frühling'
+    df.loc[df.index.month.isin([6, 7, 8]), 'Jahreszeit'] = 'Sommer'
+    df.loc[df.index.month.isin([9, 10, 11]), 'Jahreszeit'] = 'Herbst'
     
-        # Define the seasons based on the month
-        df.loc[df.index.month.isin([3, 4, 5]), 'Jahreszeit'] = 'Frühling'
-        df.loc[df.index.month.isin([6, 7, 8]), 'Jahreszeit'] = 'Sommer'
-        df.loc[df.index.month.isin([9, 10, 11]), 'Jahreszeit'] = 'Herbst'
-        
-        return df
+    return df
 
-    complete_data_with_seasons = add_season_column(complete_data.copy())
-    # Apply the function to add the 'Season' column to the com
+jahreszeit = add_season_column(complete_data.copy())
+jahreszeit2 = add_season_column(test_data.copy())
+# Füge die Daten in der Spalte 'Season' hinzu.
 
-    # Zeigt den endgültigen kombinierten DataFrame mit allen Variablen an.
-    complete_data = complete_data_with_seasons
+# Zeigt den endgültigen kombinierten DataFrame mit allen Variablen an.
+complete_data = jahreszeit
+test_data = jahreszeit2
 
 
-    season_to_numeric = {
-        'Winter': 0,
-        'Frühling': 1,
-        'Sommer': 2,
-        'Herbst': 3
-    }
-    
-    def get_jahreszeit(date):
-        month = date.month
-        if 1 <= month <= 2 or month == 12:
-            return 0
-        elif 3 <= month <= 5:
-            return 1
-        elif 6 <= month <= 8:
-            return 2
-        elif 9 <= month <= 11:
-            return 3
-    # Replace the 'Jahreszeit' column with numeric values4
-    
-    complete_data['Jahreszeit'] = complete_data['Jahreszeit'].replace(season_to_numeric)
-    
-    # Now the 'Jahreszeit' column has numeric values that represent seasons
-    # Show the DataFrame to confirm the changes
+season_to_numeric = {
+    'Winter': 0,
+    'Frühling': 1,
+    'Sommer': 2,
+    'Herbst': 3
+ }
+
+# Ersetze die 'Jahreszeit' Spalte durch numerische Werte.
+complete_data['Jahreszeit'] = complete_data['Jahreszeit'].replace(season_to_numeric)
+test_data['Jahreszeit'] = test_data['Jahreszeit'].replace(season_to_numeric)
+
+# Show the DataFrame to confirm the changes
+#complete_data
+
+new_Data = complete_data.head(24)
+
+test_data
 
 
-    complete_data
+if 'Global_solar_radiation' in complete_data.columns:
+    complete_data = complete_data.drop('Global_solar_radiation', axis=1)
+else:
+    print("Column does not exist in DataFrame")
 
-    new_Data = complete_data.head(48)
+if 'Wind_Speed' in complete_data.columns:
+    complete_data = complete_data.drop('Wind_Speed', axis=1)
+else:
+    print("Column does not exist in DataFrame")
 
-    new_Data
-    # Berechnung der Korrelationsmatrix
-    matrix = complete_data.corr()
+# complete_data
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-    # Verwenden von Seaborn, um eine Heatmap der Korrelationsmatrix zu erstellen
-    plt.figure(figsize=(10, 8))  
-    sns.heatmap(matrix, annot=True, fmt=".2f", cmap='coolwarm', square=True, cbar_kws={'shrink': .5})
+# Bestimmung der Länge des kompletten Datensatzes
+n = len(complete_data)
 
+# Aufteilung des Datensatzes in Training, Validierung und Test
+# 70% der Daten für das Training, 20% für die Validierung, 10% für den Test
+trainDF = complete_data[0:int(n*0.7)]
+valDF = complete_data[int(n*0.7):int(n*0.9)]
+testDF = complete_data[int(n*0.9):]
 
-    plt.title('Heatmap der Korrelation Features Solaranlagen')  
+# Berechnung des Mittelwerts und der Standardabweichung des Trainingsdatensatzes
+train_mean = trainDF.mean()
+train_std = trainDF.std()
 
-    # Anzeige des Plots
-    plt.savefig('heatmap.png')
+# Anzahl der Features (Spalten) im Datensatz
+featuresAnzahl = complete_data.shape[1]
 
-    complete_data.describe().transpose() # Überprüfung ob Korrektur vorgenommen werden muss an den Values in den Columns , die Daten scheinen 
-    # keine besonderen Auffäligkeiten , jedoch ist Diffuse- und Global_solar_radiation eins eins die selbe csv file.
+# Normalisierung der Trainings- Validierungs- und Testdaten
+# Durch Subtraktion des Mittelwerts und Division durch die Standardabweichung
+trainDF = (trainDF - train_mean) / train_std
+valDF = (valDF - train_mean) / train_std
+testDF = (testDF - train_mean) / train_std
 
-    #Das Duplikat wird entfernt
-    complete_data.describe().transpose() # Überprüfung von Korrektur vorgenommen werden muss an den Values in den Columns , die Datei
-    # keine besonderen Auffälligkeiten , jedoch ist Diffuse- und Global_solar_radiation eins die selbe csv file.
+# Normalisierung des gesamten Datensatzes für die Visualisierung
+df_std = (complete_data - train_mean) / train_std
 
-    # Das Duplikat wird entfernt
+df_std = df_std.melt(var_name='Column', value_name='Normalized')
 
-    if 'Global_solar_radiation' in complete_data.columns:
-        complete_data = complete_data.drop('Global_solar_radiation', axis=1)
+# Erstellung einer Violinplot-Visualisierung
+ #plt.figure(figsize=(12, 6))
+ #violin = sns.violinplot(x='Column', y='Normalized', data=df_std)
+ #_ = violin.set_xticklabels(complete_data.keys(), rotation=90)
+import numpy as np
+
+# Definition der Klasse WindowGenerator zur Erstellung von Zeitfenstern für Zeitreihendaten.
+class WindowGenerator():
+  def __init__(self, inputBreite, labelBreite, shift,
+              trainDF = trainDF, valDF = valDF, testDF = testDF, LabelSpalten=None):
+    # Speichert die Datensätze für Training, Validierung und Test.
+    self.trainDF = trainDF
+    self.valDF = valDF
+    self.testDF = testDF
+
+    # Initialisiert und speichert die Namen der Label-Spalten, falls vorhanden.
+    self.LabelSpalten = LabelSpalten
+    if LabelSpalten is not None:
+      self.LabelSpalten_indices = {name: i for i, name in
+                                    enumerate(LabelSpalten)}
+    # Erzeugt ein Wörterbuch der Spaltenindizes für den schnellen Zugriff.
+    self.column_indices = {name: i for i, name in
+                          enumerate(trainDF.columns)}
+
+    # Berechnet Parameter für die Fenstergröße und -verschiebung.
+    self.inputBreite = inputBreite
+    self.labelBreite = labelBreite
+    self.shift = shift
+
+    # Berechnet die Gesamtgröße des Fensters.
+    self.total_window_size = inputBreite + shift
+
+    # Definiert die Eingabe- und Label-Indizes innerhalb des Fensters.
+    self.inputSlice = slice(0, inputBreite)
+    self.inputIndizes = np.arange(self.total_window_size)[self.inputSlice]
+
+    self.labelStart = self.total_window_size - self.labelBreite
+    self.labelSlice = slice(self.labelStart, None)
+    self.labelIndizes = np.arange(self.total_window_size)[self.labelSlice]
+
+  # Gibt eine repräsentative Zeichenkette der Fensterparameter zurück.
+def __repr__(self):
+    return '\n'.join([
+        f'Total window size: {self.total_window_size}',
+        f'Input indices: {self.inputIndizes}',
+        f'Label indices: {self.labelIndizes}',
+        f'Label column name(s): {self.LabelSpalten}'])
+
+# Erzeugt ein Beispiel für ein WindowGenerator-Objekt mit bestimmten Parametern.
+w1 = WindowGenerator(
+    inputBreite=24,
+    labelBreite=1,
+    shift=24,
+    trainDF=trainDF,
+    valDF=valDF,
+    testDF=testDF,
+    LabelSpalten=['Electricity_generation']
+)
+
+# Methode zur Aufteilung des Fensters in Eingabe- und Label-Daten.
+def split_window(self, features):
+  # Trennt die Eingabedaten von den Label-Daten.
+  inputs = features[:, self.inputSlice, :]
+  labels = features[:, self.labelSlice, :]
+  if self.LabelSpalten is not None:
+    # Kombiniert die Label-Daten für die spezifizierten Spalten.
+    labels = tf.stack(
+        [labels[:, :, self.column_indices[name]] for name in self.LabelSpalten],
+        axis=-1)
+
+  # Setzt die Form der Eingabe- und Label-Daten manuell, um Klarheit über ihre Dimensionen zu schaffen.
+  inputs.set_shape([None, self.inputBreite, None])
+  labels.set_shape([None, self.labelBreite, None])
+
+  return inputs, labels
+
+# Fügt die Methode split_window der Klasse WindowGenerator hinzu.
+WindowGenerator.split_window = split_window
+import tensorflow as tf
+
+# Erzeugt Beispieldaten durch Stapeln von Teilen des Trainingsdatensatzes.
+example_window = tf.stack([np.array(trainDF[:w1.total_window_size]),
+                          np.array(trainDF[100:100+w1.total_window_size]),
+                          np.array(trainDF[200:200+w1.total_window_size])])
+
+# Wendet die split_window-Methode auf die Beispieldaten an, um Eingabe- und Label-Daten zu erhalten.
+inputsBeispiel, labelsBeispiel = w1.split_window(example_window)
+
+# Druckt die Formen der Beispieldaten, Eingabe- und Label-Daten.
+ #print('Die Formen sind: (batch, time, features)')
+ #print(f'Fensterform: {example_window.shape}')
+ #print(f'Inputsform: {inputsBeispiel.shape}')
+ #print(f'Labelsform: {labelsBeispiel.shape}')
+ # Fügt der Instanz von WindowGenerator ein Attribut 'example' hinzu, das ein Beispiel von Eingabe- und Label-Daten enthält.
+w1.example = inputsBeispiel, labelsBeispiel
+
+# Definiert eine Plot-Methode für die WindowGenerator-Klasse.
+def plot(self, model=None, plotSpalte='Electricity_generation', maxSubplots=3):
+  # Extrahiert die Eingabe- und Label-Daten aus dem 'example'-Attribut der Klasse.
+ inputs, labels = self.example
+
+  # Erstellt ein Plot-Fenster mit definierter Größe.
+ plt.figure(figsize=(12, 8))
+
+  # Ermittelt den Index der Spalte, die geplottet werden soll.
+ plot_col_index = self.column_indices[plotSpalte]
+
+  # Begrenzt die Anzahl der Subplots auf das Minimum von maxSubplots und der Anzahl der Beispiele.
+ max_n = min(maxSubplots, len(inputs))
+
+  # Erstellt für jedes Beispiel einen Subplot.
+ for n in range(max_n):
+    plt.subplot(max_n, 1, n+1)
+    plt.ylabel(f'{plotSpalte} [normalisiert]')
+
+    # Plottet die Eingabedaten für die ausgewählte Spalte.
+    plt.plot(self.inputIndizes, inputs[n, :, plot_col_index],
+            label='Inputs', marker='.', zorder=-10)
+
+    # Ermittelt den Index der Label-Spalte.
+    if self.LabelSpalten:
+      label_col_index = self.LabelSpalten_indices.get(plotSpalte, None)
     else:
-        print("Column does not exist in DataFrame")
-
-    if 'Wind_Speed' in complete_data.columns:
-        complete_data = complete_data.drop('Wind_Speed', axis=1)
-    else:
-        print("Column does not exist in DataFrame")
-
-    complete_data
-    # Bestimmung der Länge des kompletten Datensatzes
-    n = len(complete_data)
-
-    # Aufteilung des Datensatzes in Training, Validierung und Test
-    # 70% der Daten für das Training, 20% für die Validierung, 10% für den Test
-    train_df = complete_data[0:int(n*0.7)]
-    val_df = complete_data[int(n*0.7):int(n*0.9)]
-    test_df = complete_data[int(n*0.9):]
-
-    # Berechnung des Mittelwerts und der Standardabweichung des Trainingsdatensatzes
-    train_mean = train_df.mean()
-    train_std = train_df.std()
-
-    # Anzahl der Features (Spalten) im Datensatz
-    num_features = complete_data.shape[1]
-
-    # Normalisierung der Trainings- Validierungs- und Testdaten
-    # Durch Subtraktion des Mittelwerts und Division durch die Standardabweichung
-    train_df = (train_df - train_mean) / train_std
-    val_df = (val_df - train_mean) / train_std
-    test_df = (test_df - train_mean) / train_std
-
-    # Normalisierung des gesamten Datensatzes für die Visualisierung
-    df_std = (complete_data - train_mean) / train_std
-
-    df_std = df_std.melt(var_name='Column', value_name='Normalized')
-
-    # Erstellung einer Violinplot-Visualisierung
-    plt.figure(figsize=(12, 6))
-    ax = sns.violinplot(x='Column', y='Normalized', data=df_std)
-    _ = ax.set_xticklabels(complete_data.keys(), rotation=90)
-
-    class WindowGenerator():
-        def __init__(self, input_width, label_width, shift,
-                    train_df=train_df, val_df=val_df, test_df=test_df,
-                    label_columns=None):
-            # Store the raw data.
-            self.train_df = train_df
-            self.val_df = val_df
-            self.test_df = test_df
-
-            # Work out the label column indices.
-            self.label_columns = label_columns
-            if label_columns is not None:
-                self.label_columns_indices = {name: i for i, name in
-                                            enumerate(label_columns)}
-            self.column_indices = {name: i for i, name in
-                                enumerate(train_df.columns)}
-
-            # Work out the window parameters.
-            self.input_width = input_width
-            self.label_width = label_width
-            self.shift = shift
-            
-            self.total_window_size = input_width + shift
-
-            self.input_slice = slice(0, input_width)
-            self.input_indices = np.arange(self.total_window_size)[self.input_slice]
-
-            self.label_start = self.total_window_size - self.label_width
-            self.labels_slice = slice(self.label_start, None)
-            self.label_indices = np.arange(self.total_window_size)[self.labels_slice]
-
-        def __repr__(self):
-            return '\n'.join([
-                f'Total window size: {self.total_window_size}',
-                f'Input indices: {self.input_indices}',
-                f'Label indices: {self.label_indices}',
-                f'Label column name(s): {self.label_columns}'])
-
-    w1 = WindowGenerator(
-        input_width=24,
-        label_width=1,
-        shift=24,
-        train_df=train_df,
-        val_df=val_df,
-        test_df=test_df,
-        label_columns=['Electricity_generation']
-    )
-
-    def split_window(self, features):
-        inputs = features[:, self.input_slice, :]
-        labels = features[:, self.labels_slice, :]
-        if self.label_columns is not None:
-            labels = tf.stack(
-                [labels[:, :, self.column_indices[name]] for name in self.label_columns],
-                axis=-1)
-
-        # Slicing doesn't preserve static shape information, so set the shapes
-        # manually. This way the `tf.data.Datasets` are easier to inspect.
-        inputs.set_shape([None, self.input_width, None])
-        labels.set_shape([None, self.label_width, None])
-
-        return inputs, labels
-
-    WindowGenerator.split_window = split_window
-    
-    
-    example_window = tf.stack([np.array(train_df[:w1.total_window_size]),
-                            np.array(train_df[100:100+w1.total_window_size]),
-                            np.array(train_df[200:200+w1.total_window_size])])
-
-    example_inputs, example_labels = w1.split_window(example_window)
-
-    print('All shapes are: (batch, time, features)')
-    print(f'Window shape: {example_window.shape}')
-    print(f'Inputs shape: {example_inputs.shape}')
-    print(f'Labels shape: {example_labels.shape}')
-
-    w1.example = example_inputs, example_labels
-
-    def plot(self, model=None, plot_col='Electricity_generation', max_subplots=3):
-        inputs, labels = self.example
-        plt.figure(figsize=(12, 8))
-        plot_col_index = self.column_indices[plot_col]
-        max_n = min(max_subplots, len(inputs))
-        for n in range(max_n):
-            plt.subplot(max_n, 1, n+1)
-            plt.ylabel(f'{plot_col} [normed]')
-            plt.plot(self.input_indices, inputs[n, :, plot_col_index],
-                    label='Inputs', marker='.', zorder=-10)
-
-            if self.label_columns:
-                label_col_index = self.label_columns_indices.get(plot_col, None)
-            else:
-                label_col_index = plot_col_index
-
-            if label_col_index is None:
-                continue
-
-            plt.scatter(self.label_indices, labels[n, :, label_col_index],
-                        edgecolors='k', label='Labels', c='#2ca02c', s=64)
-            if model is not None:
-                predictions = model(inputs)
-                plt.scatter(self.label_indices, predictions[n, :, label_col_index],
-                        marker='X', edgecolors='k', label='Predictions',
-                        c='#ff7f0e', s=64)
-
-            if n == 0:
-                plt.legend()
-
-        plt.xlabel('Time [h]')
-
-    WindowGenerator.plot = plot
-
-    w1.plot()
-    plt.savefig('preview.png')
-
-    for datenRahmen in [train_df, val_df, test_df]:
-        datenRahmen.fillna(datenRahmen.mean(), inplace=True)
-
-    def make_dataset(self, data):
-        data = np.array(data, dtype=np.float32)
-        ds = tf.keras.utils.timeseries_dataset_from_array(
-            data=data,
-            targets=None,
-            sequence_length=self.total_window_size,
-            sequence_stride=1,
-            shuffle=True,
-            batch_size=32,)
-
-        ds = ds.map(self.split_window)
-        return ds
-
-    WindowGenerator.make_dataset = make_dataset
-
-    @property
-    def train(self):
-        return self.make_dataset(self.train_df)
-
-    @property
-    def val(self):
-        return self.make_dataset(self.val_df)
-
-    @property
-    def test(self):
-        return self.make_dataset(self.test_df)
-
-    @property
-    def example(self):
-        #Get and cache an example batch of `inputs, labels` for plotting.
-        result = getattr(self, '_example', None)
-        if result is None:
-            # No example batch was found, so get one from the `.train` dataset
-            result = next(iter(self.train))
-            # And cache it for next time
-            self._example = result
-        return result
-
-    WindowGenerator.train = train
-    WindowGenerator.val = val
-    WindowGenerator.test = test
-    WindowGenerator.example = example
-
-    w1.train.element_spec
-
-    single_step_window = WindowGenerator(
-        input_width=1, label_width=1, shift=1,
-        label_columns=['Electricity_generation'])
-    single_step_window
-
-
-    class Baseline(tf.keras.Model):
-        def __init__(self, label_index=None):
-            super().__init__()
-            self.label_index = label_index
-
-        def call(self, inputs):
-            if self.label_index is None:
-                return inputs
-            result = inputs[:, :, self.label_index]
-            return result[:, :, tf.newaxis]
-
-
-    column_indices = {name: i for i, name in enumerate(train_df.columns)}
-    baseline = Baseline(label_index=column_indices['Electricity_generation'])
-
-    baseline.compile(loss=tf.keras.losses.MeanSquaredError(),
-                    metrics=[tf.keras.metrics.MeanAbsoluteError()])
-
-    val_performance = {}
-    performance = {}
-    val_performance['Baseline'] = baseline.evaluate(single_step_window.val)
-    performance['Baseline'] = baseline.evaluate(single_step_window.test, verbose=0)
-
-
-    wide_window = WindowGenerator(
-        input_width=24, label_width=24, shift=1,
-        label_columns=['Electricity_generation'])
-
-    wide_window
-    wide_window.plot(baseline)
-
-
-# offset
-    OUT_STEPS = offset
-    multi_window = WindowGenerator(input_width=OUT_STEPS,
-                                label_width=OUT_STEPS,
-                                shift=OUT_STEPS)
-
-    multi_window.plot()
-    multi_window
-
-
-    class MultiStepLastBaseline(tf.keras.Model):
-        def call(self, inputs):
-            return tf.tile(inputs[:, -1:, :], [1, OUT_STEPS, 1])
-
-    last_baseline = MultiStepLastBaseline()
-    last_baseline.compile(loss=tf.keras.losses.MeanSquaredError(),
-                        metrics=[tf.keras.metrics.MeanAbsoluteError()])
-
-    multi_val_performance = {}
-    multi_performance = {}
-
-
-    class RepeatBaseline(tf.keras.Model):
-        def call(self, inputs):
-            return inputs
-
-    repeat_baseline = RepeatBaseline()
-    repeat_baseline.compile(loss=tf.keras.losses.MeanSquaredError(),
-                        metrics=[tf.keras.metrics.MeanAbsoluteError()])
-
-    multi_val_performance['Repeat'] = repeat_baseline.evaluate(multi_window.val)
-    multi_performance['Repeat'] = repeat_baseline.evaluate(multi_window.test, verbose=0)
-    multi_window.plot(repeat_baseline)
-
-
-    for df in [train_df, val_df, test_df]:
-        df.fillna(df.mean(), inplace=True)
-
-
-    linear = tf.keras.Sequential([
-        tf.keras.layers.Dense(units=1)
-    ])
-
-
-    print('Input shape:', single_step_window.example[0].shape)
-    print('Output shape:', linear(single_step_window.example[0]).shape)
-
-    MAX_EPOCHS = 1
-    def compile_and_fit(model, window, patience=2):
-        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                        patience=patience,
-                                                        mode='min')
-
-        model.compile(loss=tf.keras.losses.MeanSquaredError(),
+      label_col_index = plot_col_index
+
+    # Überspringt den Rest der Schleife, wenn kein Label-Index vorhanden ist.
+    if label_col_index is None:
+      continue
+
+    # Plottet die Label-Daten.
+    plt.scatter(self.labelIndizes, labels[n, :, label_col_index],
+                edgecolors='k', label='Labels', c='#2ca02c', s=64)
+
+    # Plottet die Vorhersagen des Modells, falls ein Modell angegeben ist.
+    if model is not None:
+      prognose = model(inputs)
+      plt.scatter(self.labelIndizes, prognose[n, :, label_col_index],
+                  marker='X', edgecolors='k', label='prognose',
+                  c='#ff7f0e', s=64)
+
+    # Fügt im ersten Subplot eine Legende hinzu.
+    if n == 0:
+      plt.legend()
+
+  # Fügt eine x-Achsen-Beschriftung hinzu.
+    plt.xlabel('Zeit [std]')
+
+# Fügt die plot-Methode zur WindowGenerator-Klasse hinzu.
+ WindowGenerator.plot = plot
+
+ # Definiert eine Methode zur Erstellung eines TensorFlow-Datensatzes aus einem gegebenen DataFrame.
+def make_dataset(self, data):
+  # Konvertiert die Daten in ein NumPy-Array mit dem Datentyp float32.
+   data = np.array(data, dtype=np.float32)
+  # Erstellt einen Zeitreihen-Datensatz aus dem Array, mit spezifizierten Parametern.
+   ds = tf.keras.utils.timeseries_dataset_from_array(
+      data=data,
+      targets=None,
+      sequence_length=self.total_window_size,
+      sequence_stride=1,
+      shuffle=True,
+      batch_size=32,)
+
+  # Wendet die split_window-Methode auf den Datensatz an, um ihn in Eingabe- und Ausgabe-Daten aufzuteilen.
+   ds = ds.map(self.split_window)
+
+   return ds
+
+# Fügt die make_dataset-Methode zur WindowGenerator-Klasse hinzu.
+WindowGenerator.make_dataset = make_dataset
+
+# Definiert Eigenschaften, um Trainings-, Validierungs- und Testdatensätze als TensorFlow-Datensätze bereitzustellen.
+@property
+def train(self):
+  return self.make_dataset(self.trainDF)
+
+@property
+def val(self):
+  return self.make_dataset(self.valDF)
+
+@property
+def test(self):
+  return self.make_dataset(self.testDF)
+
+# Definiert eine Eigenschaft, um ein Beispielbatch für die Visualisierungszwecke zu liefern.
+@property
+def example(self):
+  # Prüft, ob ein Beispielbatch bereits gespeichert ist.
+  result = getattr(self, 'beispiel', None)
+  if result is None:
+    # Holt ein Beispielbatch aus dem Trainingsdatensatz.
+    result = next(iter(self.train))
+    # Speichert es für zukünftige Verwendungen.
+    self.beispiel = result
+  return result
+
+# Fügt die Eigenschaftsmethoden zur WindowGenerator-Klasse hinzu.
+WindowGenerator.train = train
+WindowGenerator.val = val
+WindowGenerator.test = test
+WindowGenerator.example = example
+
+# Überprüft die Spezifikation des Elementes des Trainingsdatensatzes.
+w1.train.element_spec
+ # Definiert eine Konstante für die maximale Anzahl von Trainingsepochen.
+MAX_EPOCHS = 150
+
+# Definiert eine Funktion zum Kompilieren und Trainieren des Modells.
+def kompilieren(model, window, patience=2):
+  # Erstellt eine EarlyStopping-Rückruffunktion, die das Training frühzeitig beendet,
+  # wenn der Validierungsverlust für eine bestimmte Anzahl von Epochen ('patience') nicht abnimmt.
+  ruckruf = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+                                                    patience=patience,
+                                                    mode='min')
+
+  # Kompiliert das Modell mit Mean Squared Error als Verlustfunktion und Adam als Optimierer.
+  # Fügt auch die Metrik Mean Absolute Error hinzu, um die Modellleistung zu überwachen.
+  model.compile(loss=tf.keras.losses.MeanSquaredError(),
                 optimizer=tf.keras.optimizers.Adam(),
                 metrics=[tf.keras.metrics.MeanAbsoluteError()])
 
-        history = model.fit(window.train, epochs=MAX_EPOCHS,
-                        validation_data=window.val,
-                        callbacks=[early_stopping])
-        return history
+  # Trainiert das Modell mit den Trainingsdaten des 'window'-Objekts für eine maximale Anzahl von EPOCHS.
+  # Verwendet dabei die Validierungsdaten für die Leistungsbewertung und setzt die EarlyStopping-Rückruffunktion ein.
+  verlauf = model.fit(window.train, epochs=MAX_EPOCHS,
+                      validation_data=window.val,
+                      callbacks=[ruckruf])
 
-    history = compile_and_fit(linear, single_step_window)
+  # Gibt die Trainingshistorie zurück, die Informationen über den Verlauf des Trainings enthält.
+  return verlauf
+# Definiert die Anzahl der Schritte, die im Output-Fenster berücksichtigt werden sollen.
+OUT_STEPS = 24  # Definiert die Länge des Vorhersagefensters.
 
-    val_performance['Linear'] = linear.evaluate(single_step_window.val)
-    performance['Linear'] = linear.evaluate(single_step_window.test, verbose=0)
+# Erstellt eine Instanz von WindowGenerator.
+# Diese Instanz wird verwendet, um Datenfenster für das Training von Zeitreihenmodellen zu erzeugen.
+multi_window = WindowGenerator(inputBreite=24,  # Die Breite des Eingabefensters (Anzahl der Zeitschritte).
+                            labelBreite=OUT_STEPS,  # Die Breite des Label-Fensters (gleich OUT_STEPS).
+                            shift=OUT_STEPS)  # Der Versatz zwischen dem Ende des Eingabefensters und dem Beginn des Label-Fensters.
+ # Erstellt leere Dictionaries, um später die Leistung des Modells auf den Validierungs- und Testdatensätzen zu speichern.
+validierungsDatensätze = {}
+multiLeistung = {}
 
-    wide_window
-    wide_window.plot(linear)
+from IPython import display
 
-    plt.bar(x = range(len(train_df.columns)),
-            height=linear.layers[0].kernel[:,0].numpy())
-    axis = plt.gca()
-    axis.set_xticks(range(len(train_df.columns)))
-    _ = axis.set_xticklabels(train_df.columns, rotation=90)
+# Definiert die maximale Anzahl von Trainingsepochen.
+MAX_EPOCHS = 1
 
-    MAX_EPOCHS =  2
-    multi_lstm_model = tf.keras.Sequential([
-        # Shape [batch, time, features] => [batch, lstm_units].
-        # Adding more `lstm_units` just overfits more quickly.
-        tf.keras.layers.LSTM(32, return_sequences=False),
-        # Shape => [batch, out_steps*features].
-        tf.keras.layers.Dense(OUT_STEPS*num_features,
-                            kernel_initializer=tf.initializers.zeros()),
-        # Shape => [batch, out_steps, features].
-        tf.keras.layers.Reshape([OUT_STEPS, num_features])
-    ])
-
-    history = compile_and_fit(multi_lstm_model, multi_window)
-
-    display.clear_output()
-    multi_val_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.val)
-    multi_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.test, verbose=0)
-    multi_window.plot(multi_lstm_model)
+# Erstellt ein sequentielles LSTM-Modell mit TensorFlow Keras.
+multi_lstm_model = tf.keras.Sequential([
+    # Eine LSTM-Schicht mit 32 Einheiten. 'return_sequences=False' bedeutet, dass nur der letzte Output der Sequenz zurückgegeben wird.
+    tf.keras.layers.LSTM(32, return_sequences=False),
     
-    #complete_data = pd.DataFrame(index=3, columns=['Month'])
-    
-        
-    new_Data = complete_data.head(24).copy()
-    new_Data.ffill(inplace=True)
-    new_Data.bfill(inplace=True)
-    if new_Data.isnull().any().any():
-        global_mean = complete_data.mean()
-        new_Data.fillna(global_mean, inplace=True)
+    # Eine Dense-Schicht, die die Ausgabe des LSTM auf die gewünschte Größe bringt. 
+    # 'OUT_STEPS*featuresAnzahl' definiert die Gesamtzahl der Ausgabeeinheiten.
+    tf.keras.layers.Dense(OUT_STEPS*featuresAnzahl, kernel_initializer=tf.initializers.zeros()),
 
-    # Check again for NaNs
-    if new_Data.isnull().any().any():
-        print("NaNs are still present after forward and backward fill.")
-    else:
-        print("NaNs have been handled in new_Data.")
+    # Eine Reshape-Schicht, um die Ausgabe in das gewünschte Format zu bringen, hier [batch, out_steps, features].
+    tf.keras.layers.Reshape([OUT_STEPS, featuresAnzahl])
+])
 
-    print(new_Data.head(24))
+# Trainiert das Modell mit der zuvor definierten Funktion 'kompilieren', die das Modell kompiliert und dann trainiert.
+verlauf = kompilieren(multi_lstm_model, multi_window)
 
-    features_for_prediction = ["Air_temperature", "Diffuse_solar_radiation", "Relative_humidity", "Electricity_generation", "Hour", "Month", "Jahreszeit"]
-    train_mean_selected = train_mean[features_for_prediction]
-    train_std_selected = train_std[features_for_prediction]
-    normalized_new_Data = (new_Data[features_for_prediction] - train_mean_selected) / train_std_selected
+display.clear_output()
+ # Bewertet das trainierte Modell auf dem Validierungsdatensatz und speichert das Ergebnis.
+validierungsDatensätze['LSTM'] = multi_lstm_model.evaluate(multi_window.val)
 
-    num_features_model_expects = len(features_for_prediction)
-    reshaped_data = normalized_new_Data.values.reshape(1, 24, num_features_model_expects)
-    predictions = multi_lstm_model.predict(reshaped_data)
-    print(reshaped_data)
+# Bewertet das Modell auf dem Testdatensatz und speichert das Ergebnis. 'verbose=0' unterdrückt die Ausgabe während der Evaluation.
+multiLeistung['LSTM'] = multi_lstm_model.evaluate(multi_window.test, verbose=0)
 
-    electricity_generation_index = features_for_prediction.index('Electricity_generation')
-    electricity_generation_predictions = predictions[:, :, electricity_generation_index]
-    first_step_electricity_generation_prediction = electricity_generation_predictions[:, 0]
+ #multi_window.plot(multi_lstm_model)
 
+def train(dateVal):
+  def dateSlicer(dateVal):
+   from datetime import timedelta
+   import pandas as pd
 
-    # Ensure we're working with scalar values for mean and standard deviation
-    mean_electricity_generation = train_mean_selected['Electricity_generation'] # Adjust if necessary
-    std_electricity_generation = train_std_selected['Electricity_generation']    # Adjust if necessary
+# Your input date string
+   input_date_str = dateVal
 
-    # Now apply the corrected denormalization formula
-    denormalized_predictions = (electricity_generation_predictions * train_std_selected['Electricity_generation'])  + train_mean_selected['Electricity_generation']
-    
-    print("Denormalized predictions for Electricity Generation:")
+# Convert the input date string to a datetime object using pandas
+   input_date = pd.to_datetime(input_date_str)
 
+# Round the input date to the nearest hour (if your data is hourly)
+   input_date = input_date.replace(minute=0, second=0)
 
-    for i in range(len(denormalized_predictions)):
-        for j in range(len(denormalized_predictions[i])):           
-            if denormalized_predictions[i][j] < 0:
-                denormalized_predictions[i][j] = 0
-    
-    
-    valDate = new_Data.index[-1].date()
-    valHour = new_Data.index[-1].hour
-    
-    
-    print(denormalized_predictions)
-    plt.close('all')
-    dates_times = new_Data.index
-    dates = new_Data.index.date
-    hours = new_Data.index.hour
-    with plt.style.context('dark_background'):
-        plt.plot(denormalized_predictions.flatten(), marker='o', color = 'c')
-    plt.xlabel('Stunden', color = 'r')
-    plt.title('Prognose ab dem  ' + str (valDate ) + '-' + str(valHour) + ':00  '  , color = 'c' )
-    plt.ylabel('Stromerzeugung  in MW' , color = 'r')
-    plt.savefig('rnn.png')
-    multi_lstm_model.save('lstm')
+# Compute the start date as 24 hours before the input date
+   start_date = input_date - timedelta(hours=24)
 
-def button_click(): #das macht der Knopf
-    """
-    print('scale value:', round(scale.get()))
-    
-    wert = 1
-    if round(scale.get()) != 0:
-        wert = round(scale.get())
-    """
-    cal_date = cal.get_date()
-    cal_date = datetime.strptime(cal_date, "%m/%d/%y")
-    ki(24, cal_date)
-    display_image = PhotoImage(file='rnn.png').zoom(x=2,y=2)
-    
-    # Bild im Label-Widget anzeigen
-    image_label.config(image=display_image)
-    image_label.image = display_image  # Referenz behalten, um Garbage Collection zu vermeiden
+# Ensure the DataFrame index is in datetime format (if not already)
+   test_data.index = pd.to_datetime(test_data.index)
 
-"""
-def on_scale_change(event):
-    scale_value_label.config(text=f'Interval: {round(scale.get())} std')
-"""
-style = ttk.Style()
-style.configure('SunAndSky.TButton', 
-                font=('Helvetica', 17),
-                foreground='dark blue',
-                background='turquoise',
-                borderwidth=2,
-                focusthickness=3,
-                focuscolor='none'
-                )
-style.map('SunAndSky.TButton',
-        background=[('active', 'sky blue')],
-        foreground=[('active', 'blue')])
+# Slice the data between start_date and input_date
+   data_24_hours = test_data[start_date:input_date]
 
-style2 = ttk.Style()
-style2.configure('custom.TButton', 
-                font=('Helvetica', 17),
-                foreground='dark blue',  # Textfarbe
-                background='turquoise',  # Hintergrundfarbe
-                borderwidth=2,
-                relief='raised',
-                focusthickness=3) 
+# Display the result
+   return data_24_hours
 
-"""
-scale = ttk.Scale(root, from_=1, to=720, orient='horizontal', command=on_scale_change, length= 250)
-scale.pack(side = "left", padx=20 )
+  def dateSlicerTest(dateVal):
+   from datetime import timedelta
+   import pandas as pd
 
-scale_value_label = ttk.Label(root, text='Interval: 1 std', style='custom.TButton')
-scale_value_label.pack(side= "left")
-"""
+# Your input date string
+   input_date_str = dateVal
 
-image_label = Label(root)
-image_label.pack(side="right", padx=20, pady=20)
+# Convert the input date string to a datetime object using pandas
+   input_date = pd.to_datetime(input_date_str)
 
-buttonL = ttk.Button(root, text="Start", command=button_click, style='SunAndSky.TButton' ) # die ganze Knöpfe
-buttonL.place(width=400, height= 150)
-buttonL.pack(side= "left", padx= 10)
+# Round the input date to the nearest hour (if your data is hourly)
+   input_date = input_date.replace(minute=0, second=0)
+   test_data.index = pd.to_datetime(test_data.index)
+
+# Compute the start date as 24 hours before the input date
+   start_date = input_date + timedelta(hours=24)
+
+# Ensure the DataFrame index is in datetime format (if not already)
 
 
-cal = Calendar(root, selectmode='day')
-cal.pack(side= "left")
+# Slice the data between start_date and input_date
+   data_24_actual = test_data[input_date:start_date]
+
+# Display the result
+   return data_24_actual
+  hel = dateSlicer(dateVal).copy()
+  he = dateSlicerTest(dateVal).copy()
+  new_Data_test = dateSlicerTest(dateVal)
+  new_Data = dateSlicer(dateVal) 
+  new_Data = hel.copy()
+ # Auswählen der Features, die für die Prognose verwendet werden sollen.
+
+
+  prognoseFeatures = ["Electricity_generation", "Hour", "Month", "Jahreszeit"]
+#normalisiertDaten = new_Data.iloc[1:, :]
+  hel = hel.iloc[:24]
+  he = he.iloc[:24]
+
+#print(normalisiertDaten.shape)
+# Make sure that new_Data has the correct number of rows (24) and correct columns
+  new_Data = new_Data.iloc[:24]  # Select only the first 24 rows
+
+
+# Make sure you select the correct features before normalizing
+  normalisiertDaten = (new_Data[prognoseFeatures] - train_mean[prognoseFeatures]) / train_std[prognoseFeatures]
+
+
+# Now reshape should work, since normalisiertDaten should have a shape of (24, 4)
+  reshape = normalisiertDaten.values.reshape(1, 24, len(prognoseFeatures))
+
+
+# Continue with the prediction
+  prognose = multi_lstm_model.predict(reshape)
+
+# Normalisiert die ausgewählten Features in 'new_Data' mithilfe der Mittelwerte (train_mean) und Standardabweichungen (train_std) der Trainingsdaten.
+# Dies stellt sicher, dass die Daten in einer ähnlichen Skala wie die Trainingsdaten vorliegen.
+#normalisiertDaten = (new_Data[prognoseFeatures] - train_mean[prognoseFeatures]) / train_std[prognoseFeatures]
+
+# Reshape der normalisierten Daten in das Format, das vom LSTM-Modell erwartet wird.
+# Die Form ist [Anzahl der Beispiele, Zeitfenstergröße, Anzahl der Features].
+#reshape = normalisiertDaten.values.reshape(1, 24, len(prognoseFeatures))
+
+# Verwendet das trainierte LSTM-Modell, um eine Prognose basierend auf den reshaped normalisierten Daten zu erstellen.
+#prognose = multi_lstm_model.predict(reshape)
+
+#print(reshape)
+
+# Füllt vorwärtsgerichtete fehlende Werte (NaNs) in 'new_Data' mit dem vorhergehenden gültigen Wert auf.
+#new_Data.ffill(inplace=True)
+
+# Füllt rückwärtsgerichtete fehlende Werte in 'new_Data' mit dem nachfolgenden gültigen Wert auf.
+
+#new_Data.bfill(inplace=True)
+
+# Überprüft, ob es immer noch irgendwelche fehlenden Werte in 'new_Data' gibt.
+#if new_Data.isnull().any().any():
+    # Berechnet den globalen Durchschnittswert für jeden Spalte in 'complete_data', falls noch NaNs vorhanden sind.
+ #   global_mean = complete_data.mean()
+    # Füllt die verbleibenden fehlenden Werte in 'new_Data' mit dem globalen Durchschnittswert.
+  #  new_Data.fillna(global_mean, inplace=True)
+
+# Überprüft erneut auf fehlende Werte. Gibt eine Nachricht aus, je nachdem, ob NaNs gefunden wurden oder nicht.
+#if new_Data.isnull().any().any():
+ #   print("NaNs da.")
+#else:
+  #  print("NaNs weg")
+ # Wendet die Denormalisierungsformel an.
+  index_ElectricityGeneration = prognoseFeatures.index('Electricity_generation')
+
+
+  denormalisiert = prognose[:, :, index_ElectricityGeneration] * train_std['Electricity_generation'] + train_mean['Electricity_generation']
+
+# Ausgabe zur Information, dass nun denormalisierte Vorhersagen für die Stromerzeugung folgen.
+
+
+# Ersetzt negative Vorhersagewerte durch 0. Negative Werte sind in diesem Kontext (Stromerzeugung) 
+# nicht sinnvoll, daher werden sie auf 0 gesetzt, um realistische Vorhersagen zu gewährleisten.
+  for i in range(len(denormalisiert)):
+    for j in range(len(denormalisiert[i])):
+        if denormalisiert[i][j] < 0:
+            denormalisiert[i][j] = 0
+
+# Druckt die denormalisierten Prognosedaten aus. Diese Daten repräsentieren die Vorhersagen 
+# des Modells für die Stromerzeugung in der ursprünglichen Skala der Daten.
+
+  import matplotlib.pyplot as plt
+ 
+
+# Tell Matplotlib to use the event handler function
 
 
 
 
+# Assuming 'denormalisiert' is a 2D numpy array with shape (1, 24) for 24 hour predictions
+# and 'he_Data' is a DataFrame with 'Electricity_generation' column.
+
+  with plt.style.context('dark_background'):
+  # Your subplot configuration values
+   left   = 0.092 
+   bottom = 0.36   
+   right  = 0.597 
+   top    = 0.88  
+   wspace = 0.2    
+   hspace = 0.2    
+
+# Apply the configuration to all subplots
+  
+   x_values = he.index
+   y_values = hel.index
+   plt.figure(figsize=(25,11))
+   plt.plot(y_values , hel['Electricity_generation'].values, marker='o', color='b', label='Input Werte')
+   plt.plot(x_values , he['Electricity_generation'].values, marker='o', color='r', label='Echte Werte')
+   plt.plot(x_values  ,denormalisiert.flatten(), marker='o', color='c', label='Vorhersage')
+
+
+   plt.title(f"Prognose ab dem {he.index.date.max()}" )
+   plt.xlabel('Stunden')
+   plt.ylabel('Stromerzeugung in MW')
+   plt.legend()
+   plt.savefig('rnn.png')
+   mng = plt.get_current_fig_manager()
+   mng.full_screen_toggle()
+   plt.gcf().canvas.mpl_connect('key_press_event', close_event)
+   plt.subplots_adjust(left=left, bottom=bottom, right=right, top=top, wspace=wspace, hspace=hspace)
+   plt.show()
+
+
+
+# Run the main loop
 root.mainloop()
