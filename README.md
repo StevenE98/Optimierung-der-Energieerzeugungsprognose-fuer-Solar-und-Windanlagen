@@ -1,6 +1,6 @@
 # Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen
 
-[Plakat.pdf](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/files/14077543/Plakat.pdf)
+<img alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/files/14077543/Plakat.pdf">
 
 
 Das Solarprognose Programm nutzt Wetterdaten des ERA5 Modells und Energieerzeugungsdaten des Frauenhofer-Institut für Solare Energiesysteme, um dann mit Hilfe von LSTM (long short term memory) eine möglichst genaue Energieerzeugungsprognose für sowohl Solar- als auch Windenergie zu erzeugen.
