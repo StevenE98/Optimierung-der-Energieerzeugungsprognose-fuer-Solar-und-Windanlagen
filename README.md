@@ -217,7 +217,14 @@ Stellen Sie sicher, dass Sie die folgenden Bibliotheken installiert haben: $pip 
 7. Auf der grafischen Benutzeroberfläche wird ein Diagramm mit Eingabewerten, wahren Werten und vorhergesagten Werten angezeigt.
 8. Drücken Sie die "Escape" um zum Datumeingabefenster zurückzukehren
 
-![Screenshot 2024-01-31 163433](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/0049e94e-7ee3-43d1-906c-8d28b6c9d8af)
+   <img width="627" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/55268f79-d2a9-415b-bb78-8e5a46092bb6">
+
+   <img width="960" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/1c12f0a6-401e-4560-a8fb-73a3d6978bb7">
+
+   
+
+
+
 
 
 
