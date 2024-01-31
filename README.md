@@ -217,29 +217,6 @@ multi_window.plot(multi_lstm_model)
 
 
 
-
-
-
-  
-   
-   
-
-   
- 
-
-
-
-
-
- 
-   
-
-
-
-
-
-
-
 ## Autoren
 
 * **Nikita Masch**
