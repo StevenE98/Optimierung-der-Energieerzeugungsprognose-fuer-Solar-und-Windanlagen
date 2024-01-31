@@ -100,7 +100,7 @@ def process_df(files, variable_name):
    
     for file in files:
         # Liest die aktuelle CSV-Datei in einen DataFrame.
-        df = pd.read_csv(file)
+        df = pd.read_csv('csvs/'+file)
         # Konvertieren der Spalte 'Date (GMT+1)' in ein einheitliches Zeitformat ,rundung auf die nächste Stunde.
         df['Date (GMT+1)'] = pd.to_datetime(df['Date (GMT+1)']).dt.round('H')
         # Gruppiert nach 'Date (GMT+1)', um Duplikate zu entfernen und  den Mittelwert der Werte zu erechnen. 
