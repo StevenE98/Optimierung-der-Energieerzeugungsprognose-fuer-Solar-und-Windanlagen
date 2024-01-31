@@ -217,6 +217,8 @@ Stellen Sie sicher, dass Sie die folgenden Bibliotheken installiert haben: $pip 
 8. Drücken Sie die "Escape" um zum Datumeingabefenster zurückzukehren
 
 ![Screenshot 2024-01-31 163433](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/0049e94e-7ee3-43d1-906c-8d28b6c9d8af)
+<img width="960" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/0862d5c1-0dee-4164-a865-85e084aee52b">
+
 
 
 5 **Conclusion.**
