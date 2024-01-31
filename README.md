@@ -212,7 +212,7 @@ Stellen Sie sicher, dass Sie die folgenden Bibliotheken installiert haben: $pip 
 3. Klicken Sie auf "Datum festlegen", um das Datum einzustellen
 4. Klicken Sie auf "Start", um die Prognose zu starten
 5. Auf der grafischen Benutzeroberfläche wird ein Diagramm mit Eingabewerten, wahren Werten und vorhergesagten Werten angezeigt.
-6. Drücken Sie die die "Escape" um zurück auf Datumeingabe Fenster zu gehen
+6. Drücken Sie die "Escape" um zum Datumeingabefenster zurückzukehren
 
 ![Screenshot 2024-01-31 163433](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/0049e94e-7ee3-43d1-906c-8d28b6c9d8af)
 
