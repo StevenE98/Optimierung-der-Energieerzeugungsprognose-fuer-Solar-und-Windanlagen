@@ -207,12 +207,14 @@ Stellen Sie sicher, dass Sie die folgenden Bibliotheken installiert haben: $pip 
 
 
 
-1. GUI starten: $python solarprognoseGUI.py
-2. Ein bestimmtes Datum und eine bestimmte Uhrzeit für die Vorhersage in Kalender festlegen
-3. Klicken Sie auf "Datum festlegen", um das Datum einzustellen
-4. Klicken Sie auf "Start", um die Prognose zu starten
-5. Auf der grafischen Benutzeroberfläche wird ein Diagramm mit Eingabewerten, wahren Werten und vorhergesagten Werten angezeigt.
-6. Drücken Sie die "Escape" um zum Datumeingabefenster zurückzukehren
+1. GUI starten: in Visual Studio Code in jupyter lab entstehen Schwierigkeiten.
+2. Das Programm ausführen , warten bis alle Epochen durchlaufen und das Modell endgültig trainiert ist .
+3. Ein bestimmtes Datum und eine bestimmte Uhrzeit für die Vorhersage in Kalender festlegen , bis 2023 da die Werte mit aktuellen Daten verglichen werden können.
+4. Werte von 2024 können hinzugefügt werden wenn sie vorhanden sind.
+5. Klicken Sie auf "Datum festlegen", um das Datum einzustellen
+6. Klicken Sie auf "Start", um die Prognose zu starten
+7. Auf der grafischen Benutzeroberfläche wird ein Diagramm mit Eingabewerten, wahren Werten und vorhergesagten Werten angezeigt.
+8. Drücken Sie die "Escape" um zum Datumeingabefenster zurückzukehren
 
 ![Screenshot 2024-01-31 163433](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/0049e94e-7ee3-43d1-906c-8d28b6c9d8af)
 
