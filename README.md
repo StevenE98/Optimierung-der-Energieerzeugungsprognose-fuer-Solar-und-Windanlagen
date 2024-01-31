@@ -224,7 +224,11 @@ Stellen Sie sicher, dass Sie die folgenden Bibliotheken installiert haben: $pip 
 >[!IMPORTANT]
 > Solarprognosen können erflogreich durchgeführt werden. 
 > Die prozentuale Abweichung unter Verwendung des LSTM-Modells für Solaranlagen liegt bei etwa 11,52% und für Windkraftanlagen bei 17,95% .
-> Die Prognose schwankt jedoch stark wenn der Zeitraum weiter in der Zukunft liegt. 
+> Die Prognose schwankt jedoch stark wenn der Zeitraum weiter in der Zukunft liegt.
+> Wenn nur die Electricity generation Daten verwendet werden und keine Klima Daten konnte sogar die Abweichung von 0.0781 % erreicht werden.![image](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/c10fc56b-5a5c-4b07-9106-42eeb1d68b8f)
+
+>
+
 
 >[!NOTE]
 > Für ein genaueres Ergebnis der Prognose kann noch ein Autoencoder hinzugefügt werden.
