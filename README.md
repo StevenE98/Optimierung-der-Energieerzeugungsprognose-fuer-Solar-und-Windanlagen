@@ -199,8 +199,8 @@ multi_window.plot(multi_lstm_model)
 
 5 **GUI**
 Dieses GUI wurde entwickelt, um Vorhersagen für die Solarerzeugungsprognose basierend auf einem tranierten LSTM-Modell zu erstellen. Die GUI verwendet Tkinter und ttkbootstrap für die Benutzeroberfläche. In GUI wird die LSTM auf 50 Epoche gesetzt und nur die "electricty generation in Germany" csv Dateien benutzt um die Programm schneller zu starten
+![image](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/114944673/aa4cadf3-d802-4a4d-bec8-387cee0556c9)
 
-<img width="890" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/ac80b136-610a-4faa-9818-dc21b7d058d1">
  
 >[!IMPORTANT]
 Stellen Sie sicher, dass Sie die folgenden Bibliotheken installiert haben: $pip install tkinter ttkbootstrap numpy pandas matplotlib seaborn scikit-learn pillow
