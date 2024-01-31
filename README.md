@@ -198,22 +198,27 @@ multi_window.plot(multi_lstm_model)
 ![Screenshot 2024-01-15 141017](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/6c7c3e38-e899-4cc3-814d-1220c3e6399e)
 
 5 **GUI**
-> Dieses GUI wurde entwickelt, um Vorhersagen für die Solarerzeugungsprognose basierend auf einem tranierten LSTM-Modell zu erstellen. Die GUI verwendet Tkinter und ttkbootstrap für die Benutzeroberfläche.
+Dieses GUI wurde entwickelt, um Vorhersagen für die Solarerzeugungsprognose basierend auf einem tranierten LSTM-Modell zu erstellen. Die GUI verwendet Tkinter und ttkbootstrap für die Benutzeroberfläche. In GUI wird die LSTM auf 50 Epoche gesetzt und nur die "electricty generation in Germany" csv Dateien benutzt um die Programm schneller zu starten
+
+<img width="890" alt="image" src="https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/ac80b136-610a-4faa-9818-dc21b7d058d1">
  
 >[!IMPORTANT]
 Stellen Sie sicher, dass Sie die folgenden Bibliotheken installiert haben: $pip install tkinter ttkbootstrap numpy pandas matplotlib seaborn scikit-learn pillow
 
->1. GUI starten: $python solarprognoseGUI.py
->2. Ein bestimmtes Datum und eine bestimmte Uhrzeit für die Vorhersage in Kalender festlegen
->3. Klicken Sie auf "Datum festlegen", um das Datum einzustellen
->4. Klicken Sie auf "Start", um die Prognose zu starten
->5. Auf der grafischen Benutzeroberfläche wird ein Diagramm mit Eingabewerten, wahren Werten und vorhergesagten Werten angezeigt.
->6. Drücken Sie die die "Escape" um zurück auf Datumeingabe Fenster zu gehen
+
+
+1. GUI starten: $python solarprognoseGUI.py
+2. Ein bestimmtes Datum und eine bestimmte Uhrzeit für die Vorhersage in Kalender festlegen
+3. Klicken Sie auf "Datum festlegen", um das Datum einzustellen
+4. Klicken Sie auf "Start", um die Prognose zu starten
+5. Auf der grafischen Benutzeroberfläche wird ein Diagramm mit Eingabewerten, wahren Werten und vorhergesagten Werten angezeigt.
+6. Drücken Sie die die "Escape" um zurück auf Datumeingabe Fenster zu gehen
 
 ![Screenshot 2024-01-31 163433](https://github.com/StevenE98/Optimierung-der-Energieerzeugungsprognose-fuer-Solar-und-Windanlagen/assets/127848322/0049e94e-7ee3-43d1-906c-8d28b6c9d8af)
 
 
 5 **Conclusion.**
+
 >[!IMPORTANT]
 > Solarprognosen können erflogreich durchgeführt werden. 
 > Die prozentuale Abweichung unter Verwendung des LSTM-Modells für Solaranlagen liegt bei etwa 11,52% und für Windkraftanlagen bei 17,95% .
